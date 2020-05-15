@@ -16,16 +16,17 @@ from time import sleep
 from collections import namedtuple
 import torch.optim as optim
 from tensorboardX import SummaryWriter
+import matplotlib.pyplot as plt
 # maybe do some 'wait for service' here
 N_ACTION_SPACE = 2
-N_OBSERVATION_SPACE = 3
+N_OBSERVATION_SPACE = 4
 _theta =  0 
 _x = 0
 vel = 1.0
 _x_vel = 0
 _theta_vel = 0
-HIDDEN_SIZE = 128
-BATCH_SIZE = 20
+HIDDEN_SIZE = 50
+BATCH_SIZE = 32
 PERCENTILE = 80
 wrench = Wrench()
 Episode = namedtuple('Episode', field_names=['reward', 'steps'])
@@ -50,9 +51,9 @@ class Net(nn.Module):
             # nn.ReLU(),
             # nn.Linear(hidden_size, hidden_size*2),
             # nn.ReLU(),
-            nn.Linear(obs_size, hidden_size*4),
+            nn.Linear(obs_size, hidden_size),
             nn.ReLU(),
-            nn.Linear(hidden_size*4, n_actions)
+            nn.Linear(hidden_size, n_actions)
         )
 
     def forward(self, x):
@@ -64,8 +65,8 @@ class cartpole(gym.Env):
 	def __init__(self):
 		super(cartpole, self).__init__()
 		reset_simulation()
-		self.angle_threshold = math.pi/4	
-		self.pos_threshold = 5
+		self.angle_threshold = math.pi/8	
+		self.pos_threshold = 1
 		self.vel_threshold = 1000
 		self.theta_vel_thresold = 1000
 		high = np.array([self.angle_threshold,self.pos_threshold,self.vel_threshold,self.theta_vel_thresold],dtype= np.float32)
@@ -119,6 +120,7 @@ def iterate_batches(env, net, batch_size):
             episode_reward = 0.0
             episode_steps = []
             next_obs = env.reset()
+            sleep(0.15)
             if len(batch) == batch_size:
                 yield batch
                 batch = []
@@ -160,8 +162,20 @@ if __name__ == '__main__':
 	objective = nn.CrossEntropyLoss()
 	optimizer = optim.Adam(params=net.parameters(), lr=0.01)
 	writer = SummaryWriter(comment="-cartpole")
+	x_val = []
+	y_val =  []
+	i= 0 
 	for iter_no, batch in enumerate(iterate_batches(env, net, BATCH_SIZE)):
 		obs_v, acts_v, reward_b, reward_m = filter_batch(batch, PERCENTILE)
+		x_val.append(i)
+		y_val.append(reward_m)
+		# print(y_val)
+		# print(x_val)
+		plt.cla()
+		plt.plot(x_val,y_val)
+		plt.show(block=False)
+		plt.pause(0.05)
+		i = i+1
 		optimizer.zero_grad()
 		action_scores_v = net(obs_v)
 		loss_v = objective(action_scores_v, acts_v)
