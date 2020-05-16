@@ -1,4 +1,7 @@
-Output
+# CartPole with gazebo
+
+### Final output:
 ![alt text](/img/out.gif)
-Reward graph
-![alt text](/img/figure_1.png)
+
+### Reward graph:
+![alt text](/img/reward.png)
