@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>
+
+  <param name="robot_description2"
+    command="$(find xacro)/xacro --inorder '$(find cartpole)/urdf/wall.xacro'" />
+
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+  <node name="urdf_spawner2" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+    args="-urdf -model cartpole2 -param robot_description2"/>
+  
+</launch>

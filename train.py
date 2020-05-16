@@ -27,7 +27,7 @@ _x_vel = 0
 _theta_vel = 0
 HIDDEN_SIZE = 50
 BATCH_SIZE = 32
-PERCENTILE = 80
+PERCENTILE = 70
 wrench = Wrench()
 Episode = namedtuple('Episode', field_names=['reward', 'steps'])
 EpisodeStep = namedtuple('EpisodeStep', field_names=['observation', 'action'])

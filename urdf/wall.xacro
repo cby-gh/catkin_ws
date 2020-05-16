@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<robot name="cartpole" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<link name="world"/>
+
+  <joint name="fixed" type="fixed">
+    <parent link="world"/>
+    <child link="wall"/>
+  </joint>
+
+	<link name="wall">
+    <!-- pose and inertial -->
+	    <!-- <pose>0 2 0.1 0 0 0</pose> -->
+	    
+	    <inertial>
+	      <mass value="5"/>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <inertia ixx="0.013541666667" ixy="0" ixz="0" iyy="0.013541666667" iyz="0" izz="0.01875"/>
+	      
+	    </inertial>
+	    
+	    <collision name="collision_chassis">
+	    	<origin rpy="0 0 0" xyz="0 0.087 0.05"/>
+	      <geometry>
+	        <box size="8 0.02 0.10"/>
+	      </geometry>
+	    </collision>
+	    
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0.087 0.05"/>
+	      <geometry>
+	        <box size="8 0.02 0.10"/>
+	      </geometry>
+	      <material name="blue"/>
+	    </visual>
+	    
+    </link>
+    <joint name="fixed2" type="fixed">
+    <parent link="world"/>
+    <child link="wall2"/>
+  </joint>
+    <link name="wall2">
+    <!-- pose and inertial -->
+	    <!-- <pose>0 2 0.1 0 0 0</pose> -->
+	    
+	    <inertial>
+	      <mass value="5"/>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <inertia ixx="0.013541666667" ixy="0" ixz="0" iyy="0.013541666667" iyz="0" izz="0.01875"/>
+	      
+	    </inertial>
+	    
+	    <collision name="collision_chassis">
+	    	<origin rpy="0 0 0" xyz="0 -0.087 0.05"/>
+	      <geometry>
+	        <box size="8 0.02 0.10"/>
+	      </geometry>
+	    </collision>
+	    
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 -0.087 0.05"/>
+	      <geometry>
+	        <box size="8 0.02 0.10"/>
+	      </geometry>
+	      <material name="blue"/>
+	    </visual>
+	    
+    </link>
+
+</robot>

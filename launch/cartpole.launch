@@ -12,18 +12,18 @@
    <!-- <param name="use_gui" value="true"/>  -->
   
   <arg name="model" default="$(find cartpole/urdf/cartpole.xacro"/>
+  <arg name="model2" default="$(find cartpole/urdf/wall.xacro"/>
   <!-- <arg name="paused" default="false"/> -->
 
   <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <!-- <arg name="world_name" value="$(find cartpole)/worlds/world.world"/> -->
+    <!-- <arg name="world_name" valu  e="$(find cartpole)/worlds/world.world"/> -->
     <arg name="debug" value="$(arg debug)" />
     <arg name="gui" value="$(arg gui)" />
     <arg name="paused" value="$(arg paused)"/>
     <arg name="use_sim_time" value="$(arg use_sim_time)"/>
     <arg name="headless" value="$(arg headless)"/>
   </include>
-
   <!-- Load the URDF into the ROS Parameter Server -->
 
   <param name="robot_description"
@@ -33,6 +33,14 @@
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
     args="-urdf -model cartpole -param robot_description"/>
   <!-- <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />  -->
+  <param name="robot_description2"
+    command="$(find xacro)/xacro --inorder '$(find cartpole)/urdf/wall.xacro'" />
+
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+  <node name="urdf_spawner2" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+    args="-urdf -model cartpole2 -param robot_description2"/>
+
+  
 
 
 </launch>
