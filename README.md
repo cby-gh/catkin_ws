@@ -1,7 +1,8 @@
 # CartPole with gazebo
 
 ### Final output:
-![alt text](/img/out.gif)
+![alt text](/img/out.gif style=centerme)
 
-### Reward graph:
-![alt text](/img/reward.png)
+### Reward graph after 8 hours of training:
+
+![alt text](/img/reward.png style=centerme)
