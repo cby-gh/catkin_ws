@@ -1,16 +1,23 @@
 <?xml version="1.0"?>
 <robot name="cartpole" xmlns:xacro="http://www.ros.org/wiki/xacro">
 	<static>true</static>
+<link name="world"/>
+<joint name=" chassis_world" type="prismatic">
+    <origin xyz="0 0 1" rpy="0 0 0"></origin>
+    <parent link="world"></parent>
+    <child link="link_chassis"></child>
+    <axis xyz="1 0 0"></axis>
+    <limit effort="300" lower="-500.0" upper="500.0" velocity="7.0"></limit>
+    <dynamics damping="0.0" friction="0.1"/>
+</joint>
 
 	<link name="link_chassis">
     <!-- pose and inertial -->
 	    <!-- <pose>0 2 0.1 0 0 0</pose> -->
-	    
 	    <inertial>
 	      <mass value="5"/>
 	      <origin rpy="0 0 0" xyz="0 0 0"/>
-	      <inertia ixx="0.013541666667" ixy="0" ixz="0" iyy="0.013541666667" iyz="0" izz="0.01875"/>
-	      
+	      <inertia ixx="0.013541666667" ixy="0" ixz="0" iyy="0.013541666667" iyz="0" izz="0.01875"/>	      
 	    </inertial>
 	    
 	    <collision name="collision_chassis">
@@ -25,27 +32,25 @@
 	        <box size="0.15 0.15 0.10"/>
 	      </geometry>
 	      <material name="blue"/>
-	    </visual>
-	    
+	    </visual>  
     </link>
     
-  <joint name="joint" type="continuous">
+  <joint name="pole_chassis" type="continuous">
       <axis xyz="0 1 0" rpy="0 0 0" />
       <parent link="link_chassis"/>
       <child link="pole"/>
       <origin xyz="0 0 0" rpy="0 0 0"/>
+	  <dynamics damping="0.0" friction="0.01"/>
   </joint>
-  <link name="pole">
-
-	    
+	
+  <link name="pole">    
 	    <inertial>
 	      <mass value="1"/>
 	      <origin rpy="0 0 0" xyz="0 0 0.25"/>
-	      <inertia ixx="0.02086667" ixy="0" ixz="0" iyy="0.02086667" iyz="0" izz="6.6667e-4"/>
-	      
+	      <inertia ixx="0.02086667" ixy="0" ixz="0" iyy="0.02086667" iyz="0" izz="6.6667e-4"/>      
 	    </inertial>
 	    
-	    <collision >
+	   <collision >
 	    <origin rpy="0 0 0" xyz="0 0 0.25"/>
 	      <geometry>
 	        <box size="0.02 0.02 0.50"/>
@@ -58,14 +63,36 @@
 	        <box size="0.02 0.02 0.50"/>
 	      </geometry>
 	      <material name="blue"/>
-	    </visual>
-	    
+	    </visual>    
     </link>
     
-    <plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
-   <jointName>joint</jointName>
+
+	
+	
+<plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+   <jointName>pole_chassis</jointName>
    <updateRate>50.0	</updateRate>
    <alwaysOn>true</alwaysOn>
 </plugin>
+	
+	
+  <gazebo reference="link_chassis">
+     <material>Gazebo/Red</material>
+  </gazebo>
+    <gazebo reference="pole">
+       <material>Gazebo/Orange</material>
+    </gazebo>
 
+<transmission name="tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="chassis_world">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission> 	
+
+	
 </robot>

@@ -1,0 +1,14 @@
+roslaunch cartpole cartpole.launch
+roslaunch cartpole cart_pole_control_test2.launch
+rosservice call /controller_manager/load_controller "name: 'chassis_world_effort_controller'"
+rosservice call /controller_manager/load_controller "name: 'joint_state_controller'" 
+chassis_world_effort_controller','joint_state_controller
+cd ~/catkin_ws/src/cartpole
+python xstatepub.py
+python upub.py 
+python drake_control2.py
+rqt_plot
+#rostopic pub -r 10 /chassis_world_effort_controller/command std_msgs/Float64 "data: 1.0"#10hz
+#rostopic echo /curretx 
+#rostopic hz /curretx 
+#rostopic hz /chassis_world_effort_controller/command

@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<robot name="cartpole" xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<static>true</static>
+<link name="world">
+	    <visual>
+      <origin xyz="0 0 -5" rpy="0 0 0" />
+      <geometry>
+        <box size="1000 1000 10" />
+      </geometry>
+      <material>
+        <color rgba="0.93 .74 .4 1" />
+      </material>
+    </visual>
+</link>	
+	
+<joint name="chassis_world" type="prismatic">
+    <origin xyz="0 0 2" rpy="0 0 0"></origin>
+    <parent link="world"></parent>
+    <child link="link_chassis"></child>
+    <axis xyz="1 0 0"></axis>
+	<!--currently drake can not support the joint limits for continuous modelsConsider setting a non-zero time step in the 
+MultibodyPlant constructor; this will put MultibodyPlant in discrete-time mode, which does support joint limits.-->
+	<limit effort="500" lower="-500.0" upper="500.0" velocity="37.0"></limit>
+    <dynamics damping="0.1"/><!-- friction="0.0"-->
+</joint>
+
+<link name="link_chassis">
+	   <inertial>
+	      <!--<mass value="5"/>-->
+		   <mass value="5"/>
+	      <origin xyz="0 0 0" rpy="0 0 0" />
+	      <!--<inertia ixx="0.013541666667" ixy="0" ixz="0" iyy="0.013541666667" iyz="0" izz="0.01875"/>-->
+		   <inertia ixx="0.0" ixy="0" ixz="0" iyy="0.0" iyz="0" izz="0.0"/>
+	   </inertial>
+	   <!-- this tag can not be use in drake when generate trajectory<collision name="collision_chassis">
+	      <geometry>
+	        <box size="0.15 0.15 0.10"/>
+	      </geometry>
+	    </collision>-->	    
+	    <visual>
+	      <origin xyz="0 0 0" rpy="0 0 0" />
+	      <geometry>
+	        <box size="1 1 0.5"/>
+	      </geometry>	
+	      <material name="green">
+			  <color rgba="0 1 0 0.6" />
+			  </material>
+	    </visual>  
+    </link>
+    
+  <joint name="pole_chassis" type="continuous">
+      <axis xyz="0 1 0"/>
+      <parent link="link_chassis"/>
+      <child link="pole"/>
+      <origin xyz="0 0 0.25" rpy="0 0 0"/>
+	  <dynamics damping="0.1"/> <!--friction="0.0"-->
+  </joint>
+	
+  <link name="pole">    
+	    <inertial>
+	      <mass value="1"/>
+	     <origin rpy="0 0 0" xyz="0 0 -0.969"/> <!-- for PID controller-->
+			<!--<origin xyz="0  0 -6.26" rpy="0 0 0" />  without controller-->
+	      <!--<inertia ixx="0.02086667" ixy="0" ixz="0" iyy="0.02086667" iyz="0" izz="6.6667e-4"/>      -->
+			<inertia ixx="0.0" ixy="0" ixz="0" iyy="0.0" iyz="0" izz="0.00"/>  
+	    </inertial> 
+	   <!--<collision >
+	    <origin rpy="0 0 0" xyz="0 0 0.25"/>
+	      <geometry>
+	        <box size="0.02 0.02 0.50"/>
+	      </geometry>
+	    </collision>-->
+	    <visual>
+		<origin xyz="0 0 -.5" rpy="0 0 0" />
+	      <geometry>
+	        <box size="0.02 0.02 1.0"/>
+	      </geometry>
+	      <material name="blue">
+			  <color rgba="0 0 1 1" />
+			  </material>
+	    </visual>    
+    </link>
+    
+
+	
+	
+<!--<plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+   <jointName>pole_chassis</jointName>
+   <updateRate>50.0	</updateRate>
+   <alwaysOn>true</alwaysOn>
+</plugin>-->
+	
+	
+  <gazebo reference="link_chassis">
+     <material>Gazebo/Red</material>
+  </gazebo>
+    <gazebo reference="pole">
+       <material>Gazebo/Orange</material>
+    </gazebo>
+ <gazebo>
+  <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <!--<robotNamespace>/walker</robotNamespace>-->
+  <!--  <controlPeriod>: The period of the controller update (in seconds), defaults to Gazebo's period-->
+    <!--<robotParam>: The location of the robot_description (URDF) on the parameter server, defaults to '/robot_description'-->
+   <!--<robotSimType>: The pluginlib name of a custom robot sim interface to be used (see below for more details), defaults to 'DefaultRobotHWSim'-->
+  </plugin>
+  </gazebo>
+	
+	
+<transmission name="tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="chassis_world">
+		 <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+       <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission> 	
+
+	
+</robot>

@@ -2,13 +2,13 @@
 <launch>
 
   <!-- these are the arguments you can pass this launch file, for example paused:=true -->
-  <arg name="paused" default="false"/>
   <arg name="use_sim_time" default="true"/>
   <arg name="gui" default="true"/>
   <arg name="headless" default="false"/>
   <arg name="debug" default="false"/>
+  <arg name="paused" default="true"/>
   <arg name="namespace" default="kutta" />
-   <arg name="postgres_log" default="false" />
+  <arg name="postgres_log" default="false" />
    <!-- <param name="use_gui" value="true"/>  -->
   
   <arg name="model" default="$(find cartpole/urdf/cartpole.xacro"/>
@@ -27,7 +27,7 @@
   <!-- Load the URDF into the ROS Parameter Server -->
 
   <param name="robot_description"
-    command="$(find xacro)/xacro --inorder '$(find cartpole)/urdf/cartpole.xacro'" />
+    command="$(find xacro)/xacro --inorder '$(find cartpole)/urdf/cartpole2.urdf'" /><!--cartpole.xacro-->
 
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
@@ -37,8 +37,8 @@
     command="$(find xacro)/xacro --inorder '$(find cartpole)/urdf/wall.xacro'" />
 
   <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
-  <node name="urdf_spawner2" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-    args="-urdf -model cartpole2 -param robot_description2"/>
+   <!-- <node name="urdf_spawner2" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+    args="-urdf -model cartpole2 -param robot_description2"/>-->
 
   
 

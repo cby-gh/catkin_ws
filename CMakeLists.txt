@@ -8,7 +8,12 @@ project(cartpole)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  geometry_msgs
+  roscpp
   rospy
+  std_msgs
+  std_srvs
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -19,6 +24,15 @@ find_package(catkin REQUIRED COMPONENTS
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
 # catkin_python_setup()
+add_message_files(FILES catpolexMsg.msg)
+add_message_files(FILES catpoleuMsg.msg)
+add_message_files(FILES catpolexMsgx0x1.msg)
+add_message_files(FILES catpoleuMsgu0u1.msg)
+add_message_files(FILES catpolexMsgx1.msg)
+add_message_files(FILES catpoleuMsgu1.msg)
+add_message_files(FILES catpolexMsgx0.msg)
+add_message_files(FILES catpoleuMsgu0.msg)
+generate_messages(DEPENDENCIES std_msgs)
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -103,7 +117,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES cartpole
-#  CATKIN_DEPENDS rospy
+   CATKIN_DEPENDS rospy geometry_msgs roscpp rospy std_msgs std_srvs message_runtime
 #  DEPENDS system_lib
 )
 

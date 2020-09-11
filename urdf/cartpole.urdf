@@ -1,0 +1,205 @@
+<?xml version="1.0"?>
+<robot name="cartpole" xmlns:xacro="http://www.ros.org/wiki/xacro">
+	<static>true</static>
+<link name="world">
+	    <visual>
+      <origin xyz="0 0 -5" rpy="0 0 0" />
+      <geometry>
+        <box size="1000 1000 10" />
+      </geometry>
+      <material>
+        <color rgba="0.93 .74 .4 1" />
+      </material>
+    </visual>
+  </link>
+	
+<joint name="x" type="prismatic">
+    <origin xyz="0 0 0" rpy="0 0 0"></origin>
+    <parent link="world"></parent>
+    <!--<child link="link_chassis"></child>-->
+	<child link="cart"></child>
+    <axis xyz="1 0 0"></axis>
+    <limit effort="300" lower="-500.0" upper="500.0" velocity="7.0"></limit>
+    <dynamics damping="0.1" /><!--friction="0.1"-->
+</joint>
+
+<!--<link name="cart">
+	    <inertial>
+	      <mass value="5"/>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <inertia ixx="0.013541666667" ixy="0" ixz="0" iyy="0.013541666667" iyz="0" izz="0.01875"/>	      
+	    </inertial>	    
+	    <collision name="collision_chassis">
+	      <geometry>
+	        <box size="0.15 0.15 0.10"/>
+	      </geometry>
+	    </collision>
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0"/>
+	      <geometry>
+	        <box size="0.15 0.15 0.10"/>
+	      </geometry>
+	      <material name="blue">
+			<color rgba="0 0 1 1" />
+		  </material>
+	    </visual>  
+ </link>-->
+<link name="cart">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="10" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 .25" rpy="0 0 0" />
+      <geometry>
+        <box size=".6 .3 .3" />
+      </geometry>
+	      <material name="blue">
+			  <color rgba="0 1 0 1" />
+			  </material>
+    </visual>
+</link>-->
+	
+<joint name="w1" type="fixed">
+    <!--  <axis xyz="0 1 0" rpy="0 0 0" /> <dynamics damping="0.0" friction="0.00"/>-->
+      <parent link="cart"/>
+      <child link="w1"/>
+      <origin xyz="0.15 0 0.10" rpy="0 0 0"/>
+</joint>
+	
+<link name="w1">	
+	<visual>
+      <origin xyz="0 0 -.05" rpy="0 0 0" />
+      <geometry>
+        <sphere radius=".05" />
+      </geometry>
+      <material name="red">
+        <color rgba="1 0 0 1" />
+      </material>
+    </visual>
+</link>
+	
+<joint name="w2" type="fixed">
+    <!--  <axis xyz="0 1 0" rpy="0 0 0" /> <dynamics damping="0.0" friction="0.00"/>-->
+      <parent link="cart"/>
+      <child link="w2"/>
+      <origin xyz="-0.15 0 0.10" rpy="0 0 0"/>
+</joint>
+	
+<link name="w2">	
+<visual>
+      <origin xyz="0  0 -.05" rpy="0 0 0" />
+      <geometry>
+        <sphere radius=".05" />
+      </geometry>
+      <material name="blue">
+        <color rgba="0 0 1 1" />
+      </material>
+    </visual>
+</link>
+
+	
+<joint name="theta" type="continuous">
+      <axis xyz="0 1 0" rpy="0 0 0" />
+      <parent link="cart"/>
+      <child link="pole"/>
+      <origin xyz="0 0 0.40" rpy="0 0 0"/>
+	  <dynamics damping="0.0" friction="0.1"/>
+</joint>
+	
+  <!--<link name="pole">    
+	    <inertial>
+	      <mass value="0.1"/>
+	      <origin rpy="0 0 0" xyz="0 0 0.25"/>
+	      <inertia ixx="0.02086667" ixy="0" ixz="0" iyy="0.02086667" iyz="0" izz="6.6667e-4"/>      
+	    </inertial>
+	    
+	   <collision >
+	    <origin rpy="0 0 0" xyz="0 0 0.25"/>
+	      <geometry>
+	        <box size="0.02 0.02 0.50"/>
+	      </geometry>
+	    </collision>
+	    
+	    <visual>
+	      <origin rpy="0 0 0" xyz="0 0 0.25"/>
+	      <geometry>
+	        <box size="0.02 0.02 0.50"/>
+	      </geometry>
+      <material>
+        <color rgba="1 0 0 1" />
+      </material>
+			  
+	    </visual>    
+    </link>-->
+<link name="pole">
+    <inertial>
+      <origin xyz="0 0 -.5" rpy="0 0 0" />
+      <mass value="1" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 -.25" rpy="0 0 0" />
+      <geometry>
+         <cylinder length=".5" radius=".01" />
+      </geometry>
+      <material name="red">
+        <color rgba="1 0 0 1" />
+      </material>
+    </visual>
+	
+</link>   
+	
+<joint name="pole_ball" type="fixed">
+    <parent link="pole" />
+    <child link="pole_ball" />
+    <origin xyz="0 0 -0.5"  rpy="0 0 0" />
+</joint>
+	
+<link name="pole_ball">	
+    <visual>
+      <origin xyz="0 0 -0.025" rpy="0 0 0" />
+      <geometry>
+         <sphere radius=".05" />
+      </geometry>
+      <material name="blue">
+        <color rgba="0 0 1 1" />
+      </material>
+    </visual>
+</link>   	
+	
+<!--<plugin name="joint_state_publisher" filename="libgazebo_ros_joint_state_publisher.so">
+   <jointName>pole_chassis</jointName>
+   <updateRate>50.0	</updateRate>
+   <alwaysOn>true</alwaysOn>
+</plugin>
+	
+	
+  <gazebo reference="link_chassis">
+     <material>Gazebo/Red</material>
+  </gazebo>
+    <gazebo reference="pole">
+       <material>Gazebo/Orange</material>
+    </gazebo>-->
+
+<!--<transmission type="SimpleTransmission" name="cart_force">
+    <actuator name="force" />
+    <joint name="x" />
+    <mechanicalReduction>1</mechanicalReduction>
+  </transmission>-->
+	
+	
+<transmission name="cart_force">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="x">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="motor1">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission> 	
+
+	
+</robot>
