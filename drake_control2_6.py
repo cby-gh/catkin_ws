@@ -103,7 +103,7 @@ def drake_trajectory_generation(file_name):
     u_knots = np.hstack([
          u_trajectory.value(t) for t in np.linspace(u_trajectory.start_time(),
                                                     u_trajectory.end_time(), execution_time*50)
-    ])#here the u_knots now takes 50 points every secs
+    ])#here the u_knots now takes 50 points every secs === 50Hz
     #u_trajectory = dircol.ReconstructInputTrajectory(result)
     times = np.linspace(u_trajectory.start_time(), u_trajectory.end_time(), execution_time*50)
     #u_lookup = np.vectorize(u_trajectory.value)
